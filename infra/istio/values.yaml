@@ -1,0 +1,26 @@
+# infra/istio/values.yaml
+global:
+  istioNamespace: istio-system
+  proxy:
+    autoInject: enabled
+    logLevel: warning
+  proxy_init:
+    logLevel: warning
+  defaultResources:
+    requests:
+      cpu: 10m
+      memory: 40Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
+gateways:
+  istio-ingressgateway:
+    type: LoadBalancer
+    ports:
+      - port: 80
+        name: http
+        targetPort: 8080
+      - port: 443
+        name: https
+        targetPort: 8443
