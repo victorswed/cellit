@@ -1,6 +1,6 @@
 gateway:
-  name: my-app-gateway
-  namespace: default
+  name: ingress-gw
+  namespace: istio-system
   selector:
     istio: ingressgateway
   port: 80
@@ -8,13 +8,13 @@ gateway:
     - "*"
 
 virtualService:
-  name: my-app-vs
-  namespace: default
-  gateway: my-app-gateway
+  name: ingress-vs
+  namespace: istio-system
+  gateway: ingress-gw
   hosts:
     - "*"
-  prefix: /
+  prefix: /argocd
   rewrite: /
   destination:
-    host: my-app-service
+    host: argocd-server.argocd
     port: 80
