@@ -28,7 +28,7 @@ spec:
             - "*"
           prefix: /
           destination:
-            host: argocd-server.argocd.svc.cluster.local
+            host: argocd-server.argocd
             port: 80
 
   destination:
