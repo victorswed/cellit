@@ -20,4 +20,5 @@ virtualService:
       route:
         - destination:
             host: argocd-server.argocd.svc.cluster.local
-            port: 80
+            port:
+              number: 80
