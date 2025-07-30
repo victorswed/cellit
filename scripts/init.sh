@@ -5,7 +5,7 @@ set -euo pipefail
 # --- CONFIGURABLE VALUES ---
 CLUSTER_NAME="cellint"
 GITHUB_REPO_URL="https://github.com/victorswed/cellit.git"
-GITHUB_REPO_PATH="infra/"        # Path ArgoCD should watch
+GITHUB_REPO_PATH="infra/apps/"        # Path ArgoCD should watch
 GITHUB_REVISION="HEAD"           # Can be 'main', 'master', or a commit
 ARGOCD_NAMESPACE="argocd"
 ARGOCD_APPS_NAMESPACE="argocd"
@@ -78,6 +78,20 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+EOF
+
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cellit-github-repo
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  url: https://github.com/victorswed/cellit
+  password: pass
+  username: username
+  insecure: "true"
 EOF
 
 echo "✅ Done! Argo CD is now watching your GitHub repo: ${GITHUB_REPO_URL}, path: ${GITHUB_REPO_PATH}"
