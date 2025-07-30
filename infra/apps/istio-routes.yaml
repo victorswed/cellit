@@ -33,7 +33,7 @@ spec:
               route:
                 - destination:
                     host: argocd-server.argocd.svc.cluster.local
-                    port:
+                    port: 80
 
   destination:
     server: https://kubernetes.default.svc
