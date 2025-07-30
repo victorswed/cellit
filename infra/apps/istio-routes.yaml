@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-routes
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/victorswed/cellit.git
+    targetRevision: main
+    path: "infra/istio"
+    helm:
+      values: |
+        gateway:
+          name: ingress-gw
+          namespace: istio-system
+          selector:
+            istio: ingressgateway
+          port: 80
+          hosts:
+            - "*"
+
+        virtualService:
+          name: ingress-vs
+          namespace: istio-system
+          gateway: ingress-gw
+          hosts:
+            - "*"
+          prefix: /
+          destination:
+            host: argocd-server.argocd.svc.cluster.local
+            port: 80
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

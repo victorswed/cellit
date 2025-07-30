@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Values.virtualService.name }}
+  namespace: {{ .Values.virtualService.namespace }}
+spec:
+  hosts:
+    {{- toYaml .Values.virtualService.hosts | nindent 4 }}
+  gateways:
+    - {{ .Values.virtualService.gateway }}
+  http:
+    - match:
+        - uri:
+            prefix: {{ .Values.virtualService.prefix }}
+      route:
+        - destination:
+            host: {{ .Values.virtualService.destination.host }}.{{ .Values.virtualService.namespace }}.svc.cluster.local
+            port:
+              number: {{ .Values.virtualService.destination.port }}

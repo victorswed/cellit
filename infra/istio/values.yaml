@@ -1,26 +1,19 @@
-# infra/istio/values.yaml
-global:
-  istioNamespace: istio-system
-  proxy:
-    autoInject: enabled
-    logLevel: warning
-  proxy_init:
-    logLevel: warning
-  defaultResources:
-    requests:
-      cpu: 10m
-      memory: 40Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
+gateway:
+  name: my-app-gateway
+  namespace: default
+  selector:
+    istio: ingressgateway
+  port: 80
+  hosts:
+    - "*"
 
-gateways:
-  istio-ingressgateway:
-    type: LoadBalancer
-    ports:
-      - port: 80
-        name: http
-        targetPort: 8080
-      - port: 443
-        name: https
-        targetPort: 8443
+virtualService:
+  name: my-app-vs
+  namespace: default
+  gateway: my-app-gateway
+  hosts:
+    - "*"
+  prefix: /
+  destination:
+    host: my-app-service
+    port: 80

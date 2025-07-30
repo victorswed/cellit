@@ -1,0 +1,4 @@
+apiVersion: v2
+name: istio-routing
+description: Istio Gateway and VirtualService
+version: 0.1.0
