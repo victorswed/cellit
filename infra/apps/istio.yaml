@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://istio-release.storage.googleapis.com/charts
     chart: istio-base
-    targetRevision: 1.22.0  # Update as needed
+    targetRevision: 1.26.3  # Update as needed
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
