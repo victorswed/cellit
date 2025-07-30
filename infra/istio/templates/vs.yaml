@@ -9,13 +9,4 @@ spec:
   gateways:
     - {{ .Values.virtualService.gateway }}
   http:
-    - match:
-        - uri:
-            prefix: {{ .Values.virtualService.prefix }}
-          rewrite:
-            uri: {{ .Values.virtualService.rewrite }}
-      route:
-        - destination:
-            host: {{ .Values.virtualService.destination.host }}.svc.cluster.local
-            port:
-              number: {{ .Values.virtualService.destination.port }}
+  {{- toYaml .Values.virtualService.http | nindent 4 }}
