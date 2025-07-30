@@ -11,6 +11,8 @@ virtualService:
   name: ingress-vs
   namespace: istio-system
   gateway: ingress-gw
+  hosts: 
+    - "*"
   http:
     - match:
       - uri:
@@ -20,5 +22,5 @@ virtualService:
       route:
         - destination:
             host: argocd-server.argocd.svc.cluster.local
-            port:
+            port: 
               number: 80

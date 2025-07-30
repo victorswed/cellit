@@ -24,6 +24,8 @@ spec:
           name: ingress-vs
           namespace: istio-system
           gateway: ingress-gw
+          hosts: 
+            - "*"
           http:
             - match:
               - uri:
