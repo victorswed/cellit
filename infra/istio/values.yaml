@@ -14,6 +14,7 @@ virtualService:
   hosts:
     - "*"
   prefix: /
+  rewrite: /
   destination:
     host: my-app-service
     port: 80
