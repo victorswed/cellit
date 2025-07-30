@@ -12,7 +12,7 @@ spec:
     helm:
       values: |
         service:
-          type: LoadBalancer
+          type: NodePort
         autoscaling:
           enabled: false
   destination:
