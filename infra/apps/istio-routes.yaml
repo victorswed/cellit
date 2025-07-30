@@ -25,13 +25,11 @@ spec:
           namespace: istio-system
           gateway: ingress-gw
           hosts: 
-            - "*"
+            - "argocd"
           http:
             - match:
               - uri:
-                  prefix: /argocd
-              rewrite:
-                uri: /
+                  prefix: /
               route:
                 - destination:
                     host: argocd-server.argocd.svc.cluster.local
