@@ -25,15 +25,15 @@ spec:
           namespace: istio-system
           gateway: ingress-gw
           http:
-          - match:
-            - uri:
-                prefix: /argocd
-            rewrite:
-              uri: /
-            route:
-              - destination:
-                  host: argocd-server.argocd.svc.cluster.local
-                  port:
+            - match:
+              - uri:
+                  prefix: /argocd
+              rewrite:
+                uri: /
+              route:
+                - destination:
+                    host: argocd-server.argocd.svc.cluster.local
+                    port:
 
   destination:
     server: https://kubernetes.default.svc
