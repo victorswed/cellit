@@ -12,7 +12,7 @@ virtualService:
   namespace: istio-system
   gateway: ingress-gw
   hosts: 
-    - "*"
+    - ""
   http:
     - match:
       - uri:
