@@ -26,7 +26,7 @@ spec:
           gateway: ingress-gw
           hosts:
             - "*"
-          prefix: /
+          prefix: /argocd
           destination:
             host: argocd-server.argocd
             port: 80
