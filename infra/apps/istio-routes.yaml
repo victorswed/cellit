@@ -27,6 +27,7 @@ spec:
           hosts:
             - "*"
           prefix: /argocd
+          rewrite:/
           destination:
             host: argocd-server.argocd
             port: 80
