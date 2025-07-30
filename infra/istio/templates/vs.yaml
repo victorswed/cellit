@@ -13,7 +13,7 @@ spec:
         - uri:
             prefix: {{ .Values.virtualService.prefix }}
           rewrite:
-            uri: {{ .Values.virtualService.rerwite }}
+            uri: {{ .Values.virtualService.rewrite }}
       route:
         - destination:
             host: {{ .Values.virtualService.destination.host }}.svc.cluster.local
