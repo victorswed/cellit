@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: otel-kube-stack
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
+    chart: opentelemetry-kube-stack
+    targetRevision: 0.7.0
+    helm:
+      releaseName: otel-kube
+      values: |
+        mode: deployment
+        clusterName: dev-cluster
+        opentelemetry-operator:
+          admissionWebhooks:
+            certManager:
+              enabled: false
+            autoGenerateCert:
+              enabled: true
+        exporters:
+          prometheusremotewrite:
+            endpoint: "http://vmsingle-victoria-metrics-single-server.monitoring.svc:8428/api/v1/write"
+        collector:
+          enabled: true
+        components:
+          kubeletstats:
+            enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
