@@ -12,7 +12,7 @@ spec:
     helm:
       releaseName: otel
       values: |
-        mode: daemonset
+        mode: deployment
         config:
           receivers:
             prometheus:
@@ -37,23 +37,14 @@ spec:
                         regex: (.+):(?:\d+);(\d+)
                         replacement: $1:$2
                         target_label: __address__
-            otlp:
-              protocols:
-                grpc: {}
-                http: {}
           exporters:
             prometheusremotewrite:
               endpoint: "http://vmsingle-victoria-metrics-single-server.monitoring.svc:8428/api/v1/write"
-            loki:
-              endpoint: "http://loki.monitoring.svc:3100/loki/api/v1/push"
           service:
             pipelines:
               metrics:
-                receivers: [otlp]
+                receivers: [prometheus]
                 exporters: [prometheusremotewrite]
-              logs:
-                receivers: [otlp]
-                exporters: [loki]
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
