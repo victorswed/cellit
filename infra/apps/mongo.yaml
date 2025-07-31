@@ -15,9 +15,8 @@ spec:
         auth:
           rootUser: root
           rootPassword: root
-        architecture: replicaset
         replicaSet:
-          name: rs0
+          enabled: false
         persistence:
           enabled: true
           size: 1Gi
