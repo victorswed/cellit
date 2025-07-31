@@ -12,9 +12,10 @@ spec:
     helm:
       releaseName: loki
       values: |
-        config:
-          limits_config:
-            volume_enabled: true
+        loki:
+          config:
+            limits_config:
+              volume_enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
