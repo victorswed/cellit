@@ -17,8 +17,8 @@ spec:
           receivers:
             otlp:
               protocols:
-                grpc:
-                http:
+                grpc: {}
+                http: {}
           exporters:
             prometheusremotewrite:
               endpoint: "http://vmsingle.monitoring.svc:8428/api/v1/write"
