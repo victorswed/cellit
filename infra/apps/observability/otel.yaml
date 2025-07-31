@@ -21,7 +21,7 @@ spec:
                 http: {}
           exporters:
             prometheusremotewrite:
-              endpoint: "http://vmsingle.monitoring.svc:8428/api/v1/write"
+              endpoint: "http://vmsingle-victoria-metrics-single-server.monitoring.svc:8428/api/v1/write"
             loki:
               endpoint: "http://loki.monitoring.svc:3100/loki/api/v1/push"
           service:
