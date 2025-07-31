@@ -16,6 +16,8 @@ spec:
         clusterName: dev-cluster
         nodeExporter:
           enabled: true
+        kubeStateMetrics:
+          enabled: true
         opentelemetry-operator:
           admissionWebhooks:
             certManager:
