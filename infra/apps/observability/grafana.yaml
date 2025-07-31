@@ -23,7 +23,7 @@ spec:
               - name: VictoriaMetrics
                 type: prometheus
                 access: proxy
-                url: http://vmsingle.monitoring.svc:8428
+                url: http://vmsingle-victoria-metrics-single-server.monitoring.svc:8428
               - name: Loki
                 type: loki
                 access: proxy
