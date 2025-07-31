@@ -14,6 +14,8 @@ spec:
       values: |
         mode: deployment
         clusterName: dev-cluster
+        nodeExporter:
+          enabled: true
         opentelemetry-operator:
           admissionWebhooks:
             certManager:
