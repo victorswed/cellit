@@ -11,5 +11,5 @@ spec:
     metadata:
       creationTimestamp: null
       name: regcreds
-      namespace: sealed-secrets
+      namespace: argo-workflows
     type: kubernetes.io/dockerconfigjson
