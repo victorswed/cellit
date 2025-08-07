@@ -1,12 +1,15 @@
+{{- range .Values.virtualServices }}
+---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: {{ .Values.virtualService.name }}
-  namespace: {{ .Values.virtualService.namespace }}
+  name: {{ .name }}
+  namespace: {{ .namespace }}
 spec:
   hosts:
-    {{- toYaml .Values.virtualService.hosts | nindent 4 }}
+    {{- toYaml .hosts | nindent 4 }}
   gateways:
-    - {{ .Values.virtualService.gateway }}
+    - {{ .gateway }}
   http:
-  {{- toYaml .Values.virtualService.http | nindent 4 }}
+  {{- toYaml .http | nindent 4 }}
+{{- end }}

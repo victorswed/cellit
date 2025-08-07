@@ -20,21 +20,35 @@ spec:
           hosts:
             - "*.dev.localhost"
 
-        virtualService:
-          name: ingress-vs
-          namespace: istio-system
-          gateway: ingress-gw
-          hosts: 
-            - "argocd.dev.localhost"
-          http:
-            - match:
-              - uri:
-                  prefix: /
-              route:
-                - destination:
-                    host: argocd-server.argocd.svc.cluster.local
-                    port: 
-                      number: 80
+        virtualServices:
+          - name: argocd-vs
+            namespace: istio-system
+            gateway: ingress-gw
+            hosts: 
+              - "argocd.dev.localhost"
+            http:
+              - match:
+                - uri:
+                    prefix: /
+                route:
+                  - destination:
+                      host: argocd-server.argocd.svc.cluster.local
+                      port: 
+                        number: 80
+          - name: argoworkflows-vs
+            namespace: istio-system
+            gateway: ingress-gw
+            hosts: 
+              - "argoworkflows.dev.localhost"
+            http:
+              - match:
+                - uri:
+                    prefix: /
+                route:
+                  - destination:
+                      host: argo-workflows-server.argo-workflows.svc.cluster.local
+                      port: 
+                        number: 2746
 
   destination:
     server: https://kubernetes.default.svc
