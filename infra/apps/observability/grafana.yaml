@@ -1,39 +1,39 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: grafana
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://grafana.github.io/helm-charts
-    chart: grafana
-    targetRevision: 9.3.0  # use the latest stable
-    helm:
-      releaseName: grafana
-      values: |
-        adminUser: admin
-        adminPassword: changeme
-        service:
-          type: ClusterIP
-        datasources:
-          datasources.yaml:
-            apiVersion: 1
-            datasources:
-              - name: VictoriaMetrics
-                type: prometheus
-                access: proxy
-                url: http://vmsingle-victoria-metrics-single-server.monitoring.svc:8428
-              - name: Loki
-                type: loki
-                access: proxy
-                url: http://loki.monitoring.svc:3100
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: monitoring
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: grafana
+#   namespace: argocd
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://grafana.github.io/helm-charts
+#     chart: grafana
+#     targetRevision: 9.3.0  # use the latest stable
+#     helm:
+#       releaseName: grafana
+#       values: |
+#         adminUser: admin
+#         adminPassword: changeme
+#         service:
+#           type: ClusterIP
+#         datasources:
+#           datasources.yaml:
+#             apiVersion: 1
+#             datasources:
+#               - name: VictoriaMetrics
+#                 type: prometheus
+#                 access: proxy
+#                 url: http://vmsingle-victoria-metrics-single-server.monitoring.svc:8428
+#               - name: Loki
+#                 type: loki
+#                 access: proxy
+#                 url: http://loki.monitoring.svc:3100
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: monitoring
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true
