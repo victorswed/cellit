@@ -14,5 +14,5 @@ spec:
     namespace: argocd
   syncPolicy:
     automated:
-      prune: false  # You probably don’t want to prune sub-apps here
+      prune: true  # You probably don’t want to prune sub-apps here
       selfHeal: true
