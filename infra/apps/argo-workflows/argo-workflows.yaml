@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://argoproj.github.io/argo-helm
     chart: argo-workflows
-    targetRevision: v3.7.0 # or 'latest' — check https://artifacthub.io/packages/helm/argo/argo-rollouts
+    targetRevision: 0.45.21 # or 'latest' — check https://artifacthub.io/packages/helm/argo/argo-rollouts
     helm:
       releaseName: argo-workflows
   destination:
