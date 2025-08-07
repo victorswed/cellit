@@ -1,19 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: sealed-secrets
+  name: argo-workflows
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: default # Or your desired project
+  project: default
   source:
-    repoURL: https://bitnami-labs.github.io/sealed-secrets
-    targetRevision: 2.17.3
-    chart: sealed-secrets
+    repoURL: https://argoproj.github.io/argo-helm
+    chart: argo-workflows
+    targetRevision: v3.7.0 # or 'latest' — check https://artifacthub.io/packages/helm/argo/argo-rollouts
+    helm:
+      releaseName: argo-workflows
   destination:
     server: https://kubernetes.default.svc
-    namespace: sealed-secrets # Or your desired namespace for Sealed Secrets controller#   destination:
+    namespace: argo-workflows
   syncPolicy:
     automated:
       prune: true
