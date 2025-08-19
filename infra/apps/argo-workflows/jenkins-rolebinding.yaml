@@ -10,4 +10,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: jenkins
-  namespace: argo
+  namespace: argo-workflows
