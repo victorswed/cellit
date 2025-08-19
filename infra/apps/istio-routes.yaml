@@ -60,7 +60,7 @@ spec:
                     prefix: /
                 route:
                   - destination:
-                      host: argo-workflows-server.argo-workflows.svc.cluster.local
+                      host: webhook-eventsource-svc.argo-events.svc.cluster.local
                       port: 
                         number: 12000
   destination:
