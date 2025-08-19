@@ -6,7 +6,7 @@ metadata:
   namespace: argo-events
 rules:
   - apiGroups: ["argoproj.io"]
-    resources: ["workflowtemplates", "workflows"]
+    resources: ["workflowtemplates", "workflows", "workflowtaskresults"]
     verbs: ["get", "list", "watch", "create"]
 
 
