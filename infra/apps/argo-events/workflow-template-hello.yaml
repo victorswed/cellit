@@ -4,7 +4,6 @@ metadata:
   name: hello-world
   namespace: argo-events
 spec:
-  serviceAccountName: argo-events-sa
   entrypoint: main
   templates:
     - name: main

@@ -4,7 +4,6 @@ metadata:
   name: webhook-sensor
   namespace: argo-events
 spec:
-  serviceAccountName: argo-events-sa
   dependencies:
     - name: webhook-dep
       eventSourceName: webhook
