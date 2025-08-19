@@ -49,7 +49,20 @@ spec:
                       host: argo-workflows-server.argo-workflows.svc.cluster.local
                       port: 
                         number: 2746
-
+          - name: argoevents-vs
+            namespace: istio-system
+            gateway: ingress-gw
+            hosts: 
+              - "argoevents.dev.localhost"
+            http:
+              - match:
+                - uri:
+                    prefix: /
+                route:
+                  - destination:
+                      host: argo-workflows-server.argo-workflows.svc.cluster.local
+                      port: 
+                        number: 12000
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
