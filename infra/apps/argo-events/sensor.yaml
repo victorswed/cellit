@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: webhook-sensor
+  namespace: argo-events
+spec:
+  dependencies:
+    - name: webhook-dep
+      eventSourceName: webhook
+      eventName: hello
+  triggers:
+    - template:
+        name: hello-workflow-trigger
+        argoWorkflow:
+          group: argoproj.io
+          version: v1alpha1
+          resource: Workflow
+          operation: submit
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: hello-world-
+                namespace: argo-events
+              spec:
+                workflowTemplateRef:
+                  name: hello-world

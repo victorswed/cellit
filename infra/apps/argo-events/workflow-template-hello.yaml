@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: hello-world
+  namespace: argo-events
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      container:
+        image: alpine:3.17
+        command: ["sh", "-c"]
+        args: ["echo 'Hello from Argo Events 🚀'"]
