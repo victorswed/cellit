@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: CronWorkflow
+metadata:
+  name: hello-cron
+spec:
+  schedule: "* * * * *"
+  workflowSpec:
+    serviceAccountName: argo-workflows
+    entrypoint: main
+    templates:
+      - name: main
+        container:
+          image: busybox
+          command: ["echo"]
+          args: ["hello world"]

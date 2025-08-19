@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: hello
+spec:
+  serviceAccountName: argo-workflows
+  entrypoint: main
+  arguments:
+    parameters:
+      - name: message
+        value: hello killercoda
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: message
+      container:
+        image: busybox
+        command: [echo]
+        args: ["{{inputs.parameters.message}}"]

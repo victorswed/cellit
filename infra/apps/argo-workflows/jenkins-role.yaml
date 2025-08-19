@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jenkins
+  namespace: argo-workflows
+rules:
+- apiGroups:
+  - argoproj.io
+  resources:
+  - workflows
+  - workfloweventbindings
+  - workflowtemplates
+  verbs:
+  - create
+  - get
+  - list

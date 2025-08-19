@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: lifecycle-hook-
+spec:
+  serviceAccountName: argo-workflows # this is the service account that the workflow will run with
+  entrypoint: main # the first template to run in the workflows
+  hooks:
+    exit:
+      template: http
+    running:
+      expression: workflow.status == "Running"
+      template: http
+  templates:
+    - name: main
+      steps:
+        - - name: step1
+            template: heads
+
+    - name: heads
+      container:
+        image: alpine:3.6
+        command: [sh, -c]
+        args: ["sleep 30"]
+        # args: ["echo \"it was heads\""]
+
+    - name: http
+      http:
+        url: http://dummy.restapiexample.com/api/v1/employees
+
+    # - name: http
+    #   container:
+    #     image: alpine:3.6
+    #     command: [sh, -c]
+    #     # args: ["sleep 30"]
+    #     args: ["echo \"it was heads\""]

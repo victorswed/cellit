@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: input-parameters-
+spec:
+  serviceAccountName: argo-workflows # this is the service account that the workflow will run with
+  entrypoint: main # the first template to run in the workflows
+  arguments:
+    parameters:
+      - name: message
+        value: hello world
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: message
+      container:
+        image: busybox
+        command: [echo]
+        args: ["{{inputs.parameters.message}}"]
