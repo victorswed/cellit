@@ -5,6 +5,8 @@ metadata:
   namespace: argo-events
 spec:
   entrypoint: main
+  ttlStrategy:
+    secondsAfterCompletion: 300
   templates:
     - name: main
       container:
