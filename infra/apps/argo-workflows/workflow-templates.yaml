@@ -31,19 +31,20 @@ spec:
         source: |
           set -eux
           git clone "{{workflow.parameters.repoUrl}}" /src
-          ls -al /src
-        volumeMounts:
-          - name: workdir
-            mountPath: /src
+        outputs:
+          artifacts:
+            - name: cloned-repo
+              path: /src
 
     - name: lint-dockerfile
       container:
         image: hadolint/hadolint
         command: ["hadolint"]
         args: ["/src/{{workflow.parameters.dockerfile}}"]
-        volumeMounts:
-          - name: workdir
-            mountPath: /src
+      inputs:
+        artifacts:
+          - name: cloned-repo
+            path: /src
 
     - name: build-and-push-image
       container:
@@ -55,15 +56,15 @@ spec:
           - --context=/src
           - --destination={{workflow.parameters.imageName}}:{{workflow.parameters.imageTag}}
           - --cache=true
-        volumeMounts:
-          - name: workdir
-            mountPath: /src
-          - name: docker-config
-            mountPath: /kaniko/.docker/
+      inputs:
+        artifacts:
+          - name: cloned-repo
+            path: /src
+      volumeMounts:
+        - name: docker-config
+          mountPath: /kaniko/.docker/
 
   volumes:
-    - name: workdir
-      emptyDir: {}
     - name: docker-config
       secret:
         secretName: regcreds
