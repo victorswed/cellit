@@ -25,10 +25,13 @@ spec:
             template: build-and-push-image
 
     - name: clone-repo
-      container:
+      script:
         image: alpine/git
-        command: ["sh", "-c"]
-        args: ["echo {{workflow.parameters.repo-url}} /src"]
+        command: ["sh"]
+        source: |
+          set -eux
+          git clone {{workflow.parameters.repo-url}} /src
+          ls -al /src
         volumeMounts:
           - name: workdir
             mountPath: /src
