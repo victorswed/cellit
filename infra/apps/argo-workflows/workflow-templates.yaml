@@ -11,9 +11,10 @@ spec:
   arguments:
     parameters:
       - name: repoUrl
+      - name: dockerfile
       - name: imageName
       - name: imageTag
-      - name: dockerfile
+
   templates:
     - name: main
       dag:
@@ -61,7 +62,6 @@ spec:
         source: |
           set -eux
           git clone "{{inputs.parameters.repoUrl}}" /src
-          ls -al /src
         outputs:
           artifacts:
             - name: cloned-repo
@@ -96,9 +96,9 @@ spec:
           - --context=/src
           - --destination={{inputs.parameters.imageName}}:{{inputs.parameters.imageTag}}
           - --cache=true
-      volumeMounts:
-        - name: docker-config
-          mountPath: /kaniko/.docker/
+        volumeMounts:
+          - name: docker-config
+            mountPath: /kaniko/.docker/
 
   volumes:
     - name: docker-config
