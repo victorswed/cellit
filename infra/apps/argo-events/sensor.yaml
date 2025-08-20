@@ -14,7 +14,7 @@ spec:
         argoWorkflow:
           group: argoproj.io
           version: v1alpha1
-          resource: Workflow
+          resource: workflows
           operation: submit
           source:
             resource:
@@ -22,17 +22,17 @@ spec:
               kind: Workflow
               metadata:
                 generateName: docker-ci-
-                namespace: argo-workflows    # 👈 workflow submitted to argo-workflows
+                namespace: argo-workflows
               spec:
                 workflowTemplateRef:
                   name: docker-ci-pipeline
                 arguments:
                   parameters:
                     - name: repo-url
-                      value: {{events.webhook.repo-dep.body.repoUrl}}
+                      value: "{{events.webhook.repo-dep.body.repoUrl}}"
                     - name: image-name
-                      value: {{events.webhook.repo-dep.body.imageName}}
+                      value: "{{events.webhook.repo-dep.body.imageName}}"
                     - name: image-tag
-                      value: {{events.webhook.repo-dep.body.imageTag}}
+                      value: "{{events.webhook.repo-dep.body.imageTag}}"
                     - name: dockerfile
-                      value: {{events.webhook.repo-dep.body.dockerfile}}
+                      value: "{{events.webhook.repo-dep.body.dockerfile}}"
