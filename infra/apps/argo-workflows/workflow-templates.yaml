@@ -10,9 +10,9 @@ spec:
     secondsAfterCompletion: 300
   arguments:
     parameters:
-      - name: repo-url
-      - name: image-name
-      - name: image-tag
+      - name: repoUrl
+      - name: imageName
+      - name: imageTag
       - name: dockerfile
   templates:
     - name: main
@@ -30,7 +30,7 @@ spec:
         command: ["sh"]
         source: |
           set -eux
-          git clone "{{workflow.parameters.repo-url}}" /src
+          git clone "{{workflow.parameters.repoUrl}}" /src
           ls -al /src
         volumeMounts:
           - name: workdir
@@ -53,7 +53,7 @@ spec:
         args:
           - --dockerfile=/src/{{workflow.parameters.dockerfile}}
           - --context=/src
-          - --destination={{workflow.parameters.image-name}}:{{workflow.parameters.image-tag}}
+          - --destination={{workflow.parameters.imageName}}:{{workflow.parameters.imageTag}}
           - --cache=true
         volumeMounts:
           - name: workdir
