@@ -1,7 +1,67 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: Sensor
+# metadata:
+#   name: docker-ci-sensor
+#   namespace: argo-events
+# spec:
+#   dependencies:
+#     - name: repo-dep
+#       eventSourceName: webhook
+#       eventName: repo-events
+#   triggers:
+#     - template:
+#         name: docker-ci-trigger
+#         argoWorkflow:
+#           group: argoproj.io
+#           version: v1alpha1
+#           resource: workflows
+#           operation: submit
+#           source:
+#             resource:
+#               apiVersion: argoproj.io/v1alpha1
+#               kind: Workflow
+#               metadata:
+#                 generateName: docker-ci-
+#                 namespace: argo-workflows
+#               spec:
+#                 workflowTemplateRef:
+#                   name: docker-ci-pipeline
+#                 arguments:
+#                   parameters:
+#                     - name: repoUrl
+#                       # value: "{{events.webhook.repo-dep.payload.repoUrl}}"
+#                       value: REPOURL
+#                     - name: imageName
+#                       # value: "{{events.webhook.repo-dep.payload.imageName}}"
+#                       value: IMAGENAME
+#                     - name: imageTag
+#                       # value: "{{events.webhook.repo-dep.payload.imageTag}}"
+#                       value: IMAGETAG
+#                     - name: dockerfile
+#                       value: DOKERFILE
+#                       # value: "{{events.webhook.repo-dep.payload.dockerfile}}"
+#           parameters:
+#             - src:
+#                 dependencyName: repo-dep
+#                 dataKey: repoUrl
+#               dest: spec.arguments.parameters.0.value
+#             - src:
+#                 dependencyName: repo-dep
+#                 dataKey: imageName
+#               dest: spec.arguments.parameters.1.value
+#             - src:
+#                 dependencyName: repo-dep
+#                 dataKey: imageTag
+#               dest: spec.arguments.parameters.2.value
+#             - src:
+#                 dependencyName: repo-dep
+#                 dataKey: dockerfile
+#               dest: spec.arguments.parameters.3.value
+
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor
 metadata:
-  name: docker-ci-sensor
+  name: debug-webhook-sensor
   namespace: argo-events
 spec:
   dependencies:
@@ -10,50 +70,23 @@ spec:
       eventName: repo-events
   triggers:
     - template:
-        name: docker-ci-trigger
+        name: print-payload
         argoWorkflow:
-          group: argoproj.io
-          version: v1alpha1
-          resource: workflows
           operation: submit
           source:
             resource:
               apiVersion: argoproj.io/v1alpha1
               kind: Workflow
               metadata:
-                generateName: docker-ci-
+                generateName: debug-payload-
                 namespace: argo-workflows
               spec:
-                workflowTemplateRef:
-                  name: docker-ci-pipeline
-                arguments:
-                  parameters:
-                    - name: repoUrl
-                      # value: "{{events.webhook.repo-dep.payload.repoUrl}}"
-                      value: REPOURL
-                    - name: imageName
-                      # value: "{{events.webhook.repo-dep.payload.imageName}}"
-                      value: IMAGENAME
-                    - name: imageTag
-                      # value: "{{events.webhook.repo-dep.payload.imageTag}}"
-                      value: IMAGETAG
-                    - name: dockerfile
-                      value: DOKERFILE
-                      # value: "{{events.webhook.repo-dep.payload.dockerfile}}"
-          parameters:
-            - src:
-                dependencyName: repo-dep
-                dataKey: repoUrl
-              dest: spec.arguments.parameters.0.value
-            - src:
-                dependencyName: repo-dep
-                dataKey: imageName
-              dest: spec.arguments.parameters.1.value
-            - src:
-                dependencyName: repo-dep
-                dataKey: imageTag
-              dest: spec.arguments.parameters.2.value
-            - src:
-                dependencyName: repo-dep
-                dataKey: dockerfile
-              dest: spec.arguments.parameters.3.value
+                entrypoint: print-payload
+                templates:
+                  - name: print-payload
+                    container:
+                      image: alpine
+                      command: ["sh", "-c"]
+                      args:
+                        - echo "===== FULL EVENT PAYLOAD ====="
+                        - echo "{{ toJson . }}"
