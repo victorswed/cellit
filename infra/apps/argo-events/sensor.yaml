@@ -81,6 +81,7 @@ spec:
                 generateName: debug-payload-
                 namespace: argo-workflows
               spec:
+                serviceAccountName: argo-workflows
                 entrypoint: print-payload
                 templates:
                   - name: print-payload
