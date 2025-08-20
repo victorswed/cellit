@@ -21,8 +21,16 @@ spec:
             template: clone-repo
         - - name: lint
             template: lint-dockerfile
+            arguments:
+              artifacts:
+                - name: cloned-repo
+                  from: "{{steps.clone.outputs.artifacts.cloned-repo}}"
         - - name: build-and-push
             template: build-and-push-image
+            arguments:
+              artifacts:
+                - name: cloned-repo
+                  from: "{{steps.clone.outputs.artifacts.cloned-repo}}"
 
     - name: clone-repo
       script:
