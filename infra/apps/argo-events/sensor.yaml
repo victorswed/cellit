@@ -28,11 +28,11 @@ spec:
                   name: docker-ci-pipeline
                 arguments:
                   parameters:
-                    - name: repo-url
-                      value: "{{ events.webhook.repo-dep.body.repoUrl }}"
-                    - name: image-name
-                      value: "{{ events.webhook.repo-dep.body.imageName }}"
-                    - name: image-tag
-                      value: "{{ events.webhook.repo-dep.body.imageTag }}"
+                    - name: repoUrl
+                      value: "{{events.webhook.repo-dep.body.repoUrl}}"
+                    - name: imageName
+                      value: "{{events.webhook.repo-dep.body.imageName}}"
+                    - name: imageTag
+                      value: "{{events.webhook.repo-dep.body.imageTag}}"
                     - name: dockerfile
-                      value: "{{ events.webhook.repo-dep.body.dockerfile }}"
+                      value: "{{events.webhook.repo-dep.body.dockerfile}}"
