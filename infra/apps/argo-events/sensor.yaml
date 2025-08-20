@@ -29,10 +29,31 @@ spec:
                 arguments:
                   parameters:
                     - name: repoUrl
-                      value: "{{events.webhook.repo-dep.payload.repoUrl}}"
+                      # value: "{{events.webhook.repo-dep.payload.repoUrl}}"
+                      value: REPOURL
                     - name: imageName
-                      value: "{{events.webhook.repo-dep.payload.imageName}}"
+                      # value: "{{events.webhook.repo-dep.payload.imageName}}"
+                      value: IMAGENAME
                     - name: imageTag
-                      value: "{{events.webhook.repo-dep.payload.imageTag}}"
+                      # value: "{{events.webhook.repo-dep.payload.imageTag}}"
+                      value: IMAGETAG
                     - name: dockerfile
-                      value: "{{events.webhook.repo-dep.payload.dockerfile}}"
+                      value: DOKERFILE
+                      # value: "{{events.webhook.repo-dep.payload.dockerfile}}"
+          parameters:
+            - src:
+                dependencyName: repo-dep
+                dataKey: repoUrl
+              dest: spec.arguments.parameters.0.value
+            - src:
+                dependencyName: repo-dep
+                dataKey: imageName
+              dest: spec.arguments.parameters.1.value
+            - src:
+                dependencyName: repo-dep
+                dataKey: imageTag
+              dest: spec.arguments.parameters.1.value
+            - src:
+                dependencyName: repo-dep
+                dataKey: dockerfile
+              dest: spec.arguments.parameters.1.value
