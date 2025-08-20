@@ -29,10 +29,10 @@ spec:
                 arguments:
                   parameters:
                     - name: repo-url
-                      value: "{{events.webhook.repo-dep.body.repoUrl}}"
+                      value: {{events.webhook.repo-dep.body.repoUrl}}
                     - name: image-name
-                      value: "{{events.webhook.repo-dep.body.imageName}}"
+                      value: {{events.webhook.repo-dep.body.imageName}}
                     - name: image-tag
-                      value: "{{events.webhook.repo-dep.body.imageTag}}"
+                      value: {{events.webhook.repo-dep.body.imageTag}}
                     - name: dockerfile
-                      value: "{{events.webhook.repo-dep.body.dockerfile}}"
+                      value: {{events.webhook.repo-dep.body.dockerfile}}
