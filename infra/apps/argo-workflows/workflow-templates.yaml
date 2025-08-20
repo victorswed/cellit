@@ -28,7 +28,7 @@ spec:
       container:
         image: alpine/git
         command: ["sh", "-c"]
-        args: ["git clone {{workflow.parameters.repo-url}} /src"]
+        args: ["echo {{workflow.parameters.repo-url}} /src"]
         volumeMounts:
           - name: workdir
             mountPath: /src
