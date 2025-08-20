@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: workflow-access
-  namespace: argo-events
+  namespace: argo-workflows
 rules:
   - apiGroups: ["argoproj.io"]
     resources: ["workflowtemplates", "workflows", "workflowtaskresults"]
@@ -15,7 +15,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: sensor-workflow-binding
-  namespace: argo-events
+  namespace: argo-workflows
 subjects:
   - kind: ServiceAccount
     name: default

@@ -1,0 +1,69 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: docker-ci-pipeline
+  namespace: argo-workflows
+spec:
+  serviceAccountName: argo-workflows
+  entrypoint: main
+  ttlStrategy:
+    secondsAfterCompletion: 300
+  arguments:
+    parameters:
+      - name: repo-url
+      - name: image-name
+      - name: image-tag
+      - name: dockerfile
+  templates:
+    - name: main
+      steps:
+        - - name: clone
+            template: clone-repo
+        - - name: lint
+            template: lint-dockerfile
+        - - name: build-and-push
+            template: build-and-push-image
+
+    - name: clone-repo
+      container:
+        image: alpine/git
+        command: ["sh", "-c"]
+        args: ["git clone {{workflow.parameters.repo-url}} /src"]
+        volumeMounts:
+          - name: workdir
+            mountPath: /src
+
+    - name: lint-dockerfile
+      container:
+        image: hadolint/hadolint
+        command: ["hadolint"]
+        args: ["/src/{{workflow.parameters.dockerfile}}"]
+        volumeMounts:
+          - name: workdir
+            mountPath: /src
+
+    - name: build-and-push-image
+      container:
+        image: gcr.io/kaniko-project/executor:latest
+        command:
+          - /kaniko/executor
+        args:
+          - --dockerfile=/src/{{workflow.parameters.dockerfile}}
+          - --context=/src
+          - --destination={{workflow.parameters.image-name}}:{{workflow.parameters.image-tag}}
+          - --cache=true
+        volumeMounts:
+          - name: workdir
+            mountPath: /src
+          - name: docker-config
+            mountPath: /kaniko/.docker/
+
+  volumes:
+    - name: workdir
+      emptyDir: {}
+    - name: docker-config
+      secret:
+        secretName: regcreds
+        items:
+          - key: .dockerconfigjson
+            path: config.json

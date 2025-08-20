@@ -9,7 +9,7 @@ spec:
       - port: 12000
         targetPort: 12000
   webhook:
-    hello:
+    repo-events:
       port: "12000"
-      endpoint: /hello
+      endpoint: /push
       method: POST

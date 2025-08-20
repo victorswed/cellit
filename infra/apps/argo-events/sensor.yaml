@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor
 metadata:
-  name: webhook-sensor
+  name: docker-ci-sensor
   namespace: argo-events
 spec:
   dependencies:
-    - name: webhook-dep
+    - name: repo-dep
       eventSourceName: webhook
-      eventName: hello
+      eventName: repo-events
   triggers:
     - template:
-        name: hello-workflow-trigger
+        name: docker-ci-trigger
         argoWorkflow:
           group: argoproj.io
           version: v1alpha1
@@ -21,8 +21,18 @@ spec:
               apiVersion: argoproj.io/v1alpha1
               kind: Workflow
               metadata:
-                generateName: hello-world-
-                namespace: argo-events
+                generateName: docker-ci-
+                namespace: argo-workflows    # 👈 workflow submitted to argo-workflows
               spec:
                 workflowTemplateRef:
-                  name: hello-world
+                  name: docker-ci-pipeline
+                arguments:
+                  parameters:
+                    - name: repo-url
+                      value: "{{(events.webhook.repo-dep.body.repoUrl)}}"
+                    - name: image-name
+                      value: "{{(events.webhook.repo-dep.body.imageName)}}"
+                    - name: image-tag
+                      value: "{{(events.webhook.repo-dep.body.imageTag)}}"
+                    - name: dockerfile
+                      value: "{{(events.webhook.repo-dep.body.dockerfile)}}"
