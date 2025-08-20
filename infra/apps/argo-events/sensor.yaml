@@ -43,18 +43,18 @@ spec:
           parameters:
             - src:
                 dependencyName: repo-dep
-                dataKey: repoUrl
+                dataKey: body
               dest: spec.arguments.parameters.0.value
-            - src:
-                dependencyName: repo-dep
-                dataKey: imageName
-              dest: spec.arguments.parameters.1.value
-            - src:
-                dependencyName: repo-dep
-                dataKey: imageTag
-              dest: spec.arguments.parameters.2.value
-            - src:
-                dependencyName: repo-dep
-                dataKey: dockerfile
-              dest: spec.arguments.parameters.3.value
+            # - src:
+            #     dependencyName: repo-dep
+            #     dataKey: imageName
+            #   dest: spec.arguments.parameters.1.value
+            # - src:
+            #     dependencyName: repo-dep
+            #     dataKey: body.imageTag
+            #   dest: spec.arguments.parameters.2.value
+            # - src:
+            #     dependencyName: repo-dep
+            #     dataKey: dockerfile
+            #   dest: spec.arguments.parameters.3.value
 
