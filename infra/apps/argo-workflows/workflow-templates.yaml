@@ -30,7 +30,7 @@ spec:
         command: ["sh"]
         source: |
           set -eux
-          git clone {{workflow.parameters.repo-url}} /src
+          git clone "{{workflow.parameters.repo-url}}" /src
           ls -al /src
         volumeMounts:
           - name: workdir
