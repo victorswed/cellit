@@ -14,13 +14,17 @@ spec:
       - name: imageName
       - name: imageTag
       - name: dockerfile
-
   templates:
     - name: main
       dag:
         tasks:
           - name: clone
             template: clone-repo
+            arguments:
+              parameters:
+                - name: repoUrl
+                  value: "{{workflow.parameters.repoUrl}}"
+
           - name: lint
             template: lint-dockerfile
             dependencies: [clone]
@@ -28,6 +32,10 @@ spec:
               artifacts:
                 - name: cloned-repo
                   from: "{{tasks.clone.outputs.artifacts.cloned-repo}}"
+              parameters:
+                - name: dockerfile
+                  value: "{{workflow.parameters.dockerfile}}"
+
           - name: build-and-push
             template: build-and-push-image
             dependencies: [clone]
@@ -35,42 +43,59 @@ spec:
               artifacts:
                 - name: cloned-repo
                   from: "{{tasks.clone.outputs.artifacts.cloned-repo}}"
+              parameters:
+                - name: dockerfile
+                  value: "{{workflow.parameters.dockerfile}}"
+                - name: imageName
+                  value: "{{workflow.parameters.imageName}}"
+                - name: imageTag
+                  value: "{{workflow.parameters.imageTag}}"
 
     - name: clone-repo
+      inputs:
+        parameters:
+          - name: repoUrl
       script:
         image: alpine/git
         command: ["sh"]
         source: |
           set -eux
-          git clone "{{workflow.parameters.repoUrl}}" /src
+          git clone "{{inputs.parameters.repoUrl}}" /src
+          ls -al /src
         outputs:
           artifacts:
             - name: cloned-repo
               path: /src
 
     - name: lint-dockerfile
-      container:
-        image: hadolint/hadolint
-        command: ["hadolint"]
-        args: ["/src/{{workflow.parameters.dockerfile}}"]
       inputs:
         artifacts:
           - name: cloned-repo
             path: /src
+        parameters:
+          - name: dockerfile
+      container:
+        image: hadolint/hadolint
+        command: ["hadolint"]
+        args: ["/src/{{inputs.parameters.dockerfile}}"]
 
     - name: build-and-push-image
+      inputs:
+        artifacts:
+          - name: cloned-repo
+            path: /src
+        parameters:
+          - name: dockerfile
+          - name: imageName
+          - name: imageTag
       container:
         image: gcr.io/kaniko-project/executor:latest
         command: ["/kaniko/executor"]
         args:
-          - --dockerfile=/src/{{workflow.parameters.dockerfile}}
+          - --dockerfile=/src/{{inputs.parameters.dockerfile}}
           - --context=/src
-          - --destination={{workflow.parameters.imageName}}:{{workflow.parameters.imageTag}}
+          - --destination={{inputs.parameters.imageName}}:{{inputs.parameters.imageTag}}
           - --cache=true
-      inputs:
-        artifacts:
-          - name: cloned-repo
-            path: /src
       volumeMounts:
         - name: docker-config
           mountPath: /kaniko/.docker/
