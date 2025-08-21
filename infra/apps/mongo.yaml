@@ -1,3 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mongodb
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: mongodb
+    targetRevision: 13.6.2
+    helm:
+      releaseName: mongodb
+      values: |
+        architecture: standalone
+        auth:
+          enabled: true
+          rootUser: root
+          rootPassword: root
+        persistence:
+          enabled: false
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        podSecurityContext:
+          enabled: false
+        containerSecurityContext:
+          enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: mongodb
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 # apiVersion: argoproj.io/v1alpha1
 # kind: Application
 # metadata:
