@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DevHub</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; background: #0b1020; color: #e8eefc; }
+    h1 { margin-bottom: 8px; }
+    .card { background: #121a33; border: 1px solid #22315c; border-radius: 12px; padding: 20px; max-width: 760px; }
+    label { display:block; margin: 10px 0 4px; }
+    input, select, textarea { width:100%; padding:10px; border-radius:8px; border:1px solid #2a3c70; background:#0f1730; color:#e8eefc; }
+    button { background:#2d68ff; color:white; border:none; padding:12px 16px; border-radius:10px; margin-top:12px; cursor:pointer; }
+    button:hover { background:#1e55e6; }
+    table { width:100%; margin-top:18px; border-collapse: collapse; }
+    th, td { border-bottom:1px solid #22315c; padding:8px; font-size:14px; }
+    .row { display:flex; gap:16px; }
+    .col { flex:1; }
+    small { color:#a8b4d9; }
+  </style>
+</head>
+<body>
+  <h1>DevHub</h1>
+  <p><small>Create mocked dev environments and track them.</small></p>
+  <div class="card">
+    <form id="order-form">
+      <div class="row">
+        <div class="col">
+          <label>Owner</label>
+          <input id="owner" required />
+        </div>
+        <div class="col">
+          <label>Project</label>
+          <input id="project" required />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label>Language</label>
+          <select id="language">
+            <option>Python</option>
+            <option>TypeScript</option>
+            <option>Go</option>
+          </select>
+        </div>
+        <div class="col">
+          <label>Size</label>
+          <select id="size">
+            <option>small</option>
+            <option>medium</option>
+            <option>large</option>
+          </select>
+        </div>
+      </div>
+      <label>Notes</label>
+      <textarea id="notes" rows="3"></textarea>
+      <button type="submit">Order environment</button>
+    </form>
+    <div id="status"></div>
+    <table id="orders">
+      <thead>
+        <tr><th>Owner</th><th>Project</th><th>Language</th><th>Size</th><th>Created</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <script>
+    const API = (window.API_BASE || 'http://localhost:8000');
+
+    async function fetchOrders() {
+      const res = await fetch(`${API}/orders`);
+      const data = await res.json();
+      const tbody = document.querySelector('#orders tbody');
+      tbody.innerHTML = '';
+      for (const o of data) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${o.owner}</td><td>${o.project}</td><td>${o.language}</td><td>${o.size}</td><td>${new Date(o.created_at).toLocaleString()}</td>`;
+        tbody.appendChild(tr);
+      }
+    }
+
+    document.getElementById('order-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        owner: document.getElementById('owner').value,
+        project: document.getElementById('project').value,
+        language: document.getElementById('language').value,
+        size: document.getElementById('size').value,
+        notes: document.getElementById('notes').value,
+      };
+      const res = await fetch(`${API}/orders`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (res.ok) {
+        document.getElementById('status').textContent = 'Order placed!';
+        await fetchOrders();
+      } else {
+        const t = await res.text();
+        document.getElementById('status').textContent = 'Failed: ' + t;
+      }
+    });
+
+    fetchOrders();
+  </script>
+</body>
+</html>

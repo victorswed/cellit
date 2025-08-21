@@ -32,6 +32,28 @@ spec:
           enabled: false
         containerSecurityContext:
           enabled: false
+        # More generous probes for local clusters to avoid 5s timeouts
+        livenessProbe:
+          enabled: true
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 10
+          failureThreshold: 6
+          successThreshold: 1
+        readinessProbe:
+          enabled: true
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 18
+          successThreshold: 1
+        startupProbe:
+          enabled: true
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 60
+          successThreshold: 1
   destination:
     server: https://kubernetes.default.svc
     namespace: mongodb
