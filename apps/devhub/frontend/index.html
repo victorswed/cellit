@@ -66,7 +66,7 @@
   </div>
   <script src="config.js"></script>
   <script>
-    const API = (window.API_BASE || 'http://localhost:8000');
+    const API = (window.API_BASE || '/api');
 
     async function fetchOrders() {
       const res = await fetch(`${API}/orders`);
