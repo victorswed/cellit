@@ -53,4 +53,3 @@ metadata:
 data:
   config.js: |
     window.API_BASE = window.API_BASE || "/api"
-    # window.API_BASE = window.API_BASE || "http://{{ include "devhub.fullname" . }}-backend.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.backend.port }}"\;
