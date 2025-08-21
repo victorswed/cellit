@@ -26,6 +26,7 @@ spec:
               spec:
                 workflowTemplateRef:
                   name: docker-ci-pipeline
+                  clusterScope: true
                 arguments:
                   parameters:
                     - name: repoUrl
