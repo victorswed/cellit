@@ -24,7 +24,7 @@ spec:
                 generateName: docker-ci-
                 namespace: argo-workflows
               spec:
-                clusterworkflowtemplatesref:
+                templateRef:
                   name: docker-ci-pipeline
                 arguments:
                   parameters:
