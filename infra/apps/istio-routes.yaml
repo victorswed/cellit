@@ -71,9 +71,7 @@ spec:
             http:
               - match:
                   - uri:
-                      regex: ^/api(/|$)(.*)
-                rewrite:
-                  uri: /$2
+                      prefix: /api
                 route:
                   - destination:
                       host: devhub-devhub-backend.devhub.svc.cluster.local
