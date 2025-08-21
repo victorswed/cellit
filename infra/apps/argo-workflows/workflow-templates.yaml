@@ -39,7 +39,7 @@ spec:
 
           - name: build-and-push
             template: build-and-push-image
-            dependencies: [clone]
+            dependencies: [lint]
             arguments:
               artifacts:
                 - name: cloned-repo
@@ -62,10 +62,10 @@ spec:
         source: |
           set -eux
           git clone "{{inputs.parameters.repoUrl}}" /src
-        outputs:
-          artifacts:
-            - name: cloned-repo
-              path: /src
+      outputs:
+        artifacts:
+          - name: cloned-repo
+            path: /src
 
     - name: lint-dockerfile
       inputs:

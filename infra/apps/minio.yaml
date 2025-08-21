@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: minio
+    targetRevision: 14.6.15
+    helm:
+      releaseName: argo-artifacts
+      values: |
+        fullnameOverride: argo-artifacts
+        service:
+          type: ClusterIP
+          ports:
+            api: 9000
+            console: 9001
+        auth:
+          rootUser: minio
+          rootPassword: minio12345
+        defaultBuckets: argo-artifacts
+        persistence:
+          enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-workflows
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+

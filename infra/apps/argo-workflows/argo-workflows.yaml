@@ -17,6 +17,17 @@ spec:
         server:
           authModes:
             - server 
+        artifactRepository:
+          s3:
+            endpoint: argo-artifacts:9000
+            bucket: argo-artifacts
+            insecure: true
+            accessKeySecret:
+              name: argo-artifacts
+              key: root-user
+            secretKeySecret:
+              name: argo-artifacts
+              key: root-password
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-workflows
