@@ -1,8 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate
+kind: ClusterWorkflowTemplate
 metadata:
   name: docker-ci-pipeline
-  namespace: argo-workflows
 spec:
   serviceAccountName: argo-workflows
   entrypoint: main
@@ -76,8 +75,10 @@ spec:
           - name: dockerfile
       container:
         image: hadolint/hadolint
-        command: ["hadolint --no-fail"]
-        args: ["/src/{{inputs.parameters.dockerfile}}"]
+        command: ["hadolint"]
+        args: 
+          - "/src/{{inputs.parameters.dockerfile}}"
+          -  --no-fail
 
     - name: build-and-push-image
       inputs:
