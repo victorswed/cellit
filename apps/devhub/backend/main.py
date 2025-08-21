@@ -34,18 +34,18 @@ class EnvOrderOut(EnvOrder):
     id: str
     created_at: datetime
 
-@app.get("/healthz")
+@app.get("/api/healthz")
 def healthz():
     return {"status": "ok"}
 
-@app.post("/orders", response_model=EnvOrderOut)
+@app.post("/api/orders", response_model=EnvOrderOut)
 def create_order(req: EnvOrder):
     doc = req.dict()
     doc["created_at"] = datetime.utcnow()
     result = orders.insert_one(doc)
     return {"id": str(result.inserted_id), **doc}
 
-@app.get("/orders", response_model=List[EnvOrderOut])
+@app.get("/api/orders", response_model=List[EnvOrderOut])
 def list_orders():
     docs = []
     for d in orders.find().sort("created_at", -1):
