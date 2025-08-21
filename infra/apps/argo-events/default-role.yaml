@@ -6,7 +6,7 @@ metadata:
   namespace: argo-workflows
 rules:
   - apiGroups: ["argoproj.io"]
-    resources: ["workflowtemplates", "workflows", "workflowtaskresults", "clusterWorkflowTemplate"]
+    resources: ["workflowtemplates", "workflows", "workflowtaskresults", "clusterWorkflowTemplates"]
     verbs: ["get", "list", "watch", "create", "patch"]
 
 
