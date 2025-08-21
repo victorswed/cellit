@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: devhub
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: REPLACE_WITH_YOUR_GIT_REPO_URL
+    targetRevision: main
+    path: apps/devhub/charts/devhub
+    helm:
+      releaseName: devhub
+      values: |
+        image:
+          backend:
+            repository: docker.io/REPLACE_ME/devhub-backend
+            tag: latest
+            pullPolicy: IfNotPresent
+          frontend:
+            repository: docker.io/REPLACE_ME/devhub-frontend
+            tag: latest
+            pullPolicy: IfNotPresent
+        service:
+          backend:
+            type: ClusterIP
+            port: 8000
+          frontend:
+            type: ClusterIP
+            port: 80
+        mongo:
+          uri: mongodb://root:root@mongodb.mongodb.svc.cluster.local:27017/?authSource=admin
+          db: devhub
+          collection: orders
+        ingress:
+          enabled: false
+          className: ""
+          hosts:
+            - host: devhub.local
+              paths:
+                - path: /
+                  pathType: Prefix
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: devhub
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
