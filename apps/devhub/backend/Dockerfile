@@ -13,11 +13,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     rm -rf /var/lib/apt/lists/*
 
 # Python deps
-COPY requirements.txt /app/
+COPY apps/devhub/backend/requirements.txt /app/
 RUN pip install -r requirements.txt
 
 # App code
-COPY . /app
+COPY apps/devhub/backend/ /app
 
 EXPOSE 8000
 
