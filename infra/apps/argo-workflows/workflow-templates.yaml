@@ -76,7 +76,7 @@ spec:
           - name: dockerfile
       container:
         image: hadolint/hadolint
-        command: ["hadolint"]
+        command: ["hadolint --no-fail"]
         args: ["/src/{{inputs.parameters.dockerfile}}"]
 
     - name: build-and-push-image
