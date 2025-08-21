@@ -4,7 +4,7 @@ image:
     tag: latest
     pullPolicy: IfNotPresent
   frontend:
-    repository: docker.io/REPLACE_ME/cellit-frontend
+    repository: docker.io/victor1721swed/cellit-frontend
     tag: latest
     pullPolicy: IfNotPresent
 service:
