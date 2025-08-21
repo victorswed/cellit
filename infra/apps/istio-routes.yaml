@@ -63,6 +63,30 @@ spec:
                       host: webhook-eventsource-svc.argo-events.svc.cluster.local
                       port: 
                         number: 12000
+          - name: devhub-vs
+            namespace: istio-system
+            gateway: ingress-gw
+            hosts:
+              - "devhub.dev.localhost"
+            http:
+              - match:
+                  - uri:
+                      regex: ^/api(/|$)(.*)
+                rewrite:
+                  uri: /$2
+                route:
+                  - destination:
+                      host: devhub-devhub-backend.devhub.svc.cluster.local
+                      port:
+                        number: 8000
+              - match:
+                  - uri:
+                      prefix: /
+                route:
+                  - destination:
+                      host: devhub-devhub-frontend.devhub.svc.cluster.local
+                      port:
+                        number: 80
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
