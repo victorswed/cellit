@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "devhub.fullname" . }}-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "devhub.name" . }}
+      app.kubernetes.io/component: frontend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "devhub.name" . }}
+        app.kubernetes.io/component: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: "{{ .Values.image.frontend.repository }}:{{ .Values.image.frontend.tag }}"
+          imagePullPolicy: {{ .Values.image.frontend.pullPolicy }}
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/nginx/html/config.js
+              subPath: config.js
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "devhub.fullname" . }}-frontend-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "devhub.fullname" . }}-frontend
+spec:
+  type: {{ .Values.service.frontend.type }}
+  selector:
+    app.kubernetes.io/name: {{ include "devhub.name" . }}
+    app.kubernetes.io/component: frontend
+  ports:
+    - port: {{ .Values.service.frontend.port }}
+      targetPort: 80
+      name: http
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "devhub.fullname" . }}-frontend-config
+  labels:
+    app.kubernetes.io/name: {{ include "devhub.name" . }}
+    app.kubernetes.io/component: frontend
+data:
+  config.js: |
+    window.API_BASE = window.API_BASE || "http://{{ include "devhub.fullname" . }}-backend.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.backend.port }}"\;

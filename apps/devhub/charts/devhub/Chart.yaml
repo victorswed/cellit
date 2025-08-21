@@ -1,0 +1,5 @@
+apiVersion: v2
+name: devhub
+version: 0.1.0
+appVersion: "0.1.0"
+description: DevHub app (frontend + backend)

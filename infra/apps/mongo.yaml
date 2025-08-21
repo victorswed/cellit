@@ -14,7 +14,8 @@ spec:
     helm:
       releaseName: mongodb
       values: |
-        architecture: standalone
+        architecture: replicaset
+        replicaCount: 1
         auth:
           enabled: true
           rootUser: root
@@ -41,7 +42,7 @@ spec:
           failureThreshold: 6
           successThreshold: 1
         readinessProbe:
-          enabled: true
+          enabled: false
           initialDelaySeconds: 20
           periodSeconds: 10
           timeoutSeconds: 10
