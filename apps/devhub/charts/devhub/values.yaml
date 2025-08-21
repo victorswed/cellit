@@ -2,7 +2,7 @@ image:
   backend:
     repository: docker.io/victor1721swed/cellit-backend
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   frontend:
     repository: docker.io/victor1721swed/cellit-frontend
     tag: latest
