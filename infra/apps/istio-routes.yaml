@@ -85,6 +85,12 @@ spec:
                       host: devhub-devhub-frontend.devhub.svc.cluster.local
                       port:
                         number: 80
+                    weight: 100
+                  - destination:
+                      host: devhub-devhub-frontend-canary.devhub.svc.cluster.local
+                      port:
+                        number: 80
+                    weight: 0                
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
