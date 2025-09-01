@@ -13,6 +13,8 @@ spec:
       releaseName: argo-rollouts
       values: |
         installCRDs: true
+        dashboard:
+          enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: argo-rollouts
