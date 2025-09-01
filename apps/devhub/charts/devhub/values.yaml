@@ -5,7 +5,7 @@ image:
     pullPolicy: Always
   frontend:
     repository: docker.io/victor1721swed/cellit-frontend
-    tag: latest
+    tag: v1.0.1-canary
     pullPolicy: IfNotPresent
 service:
   backend:
