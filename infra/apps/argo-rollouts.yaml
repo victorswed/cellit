@@ -1,24 +1,24 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: argo-rollouts
-#   namespace: argocd
-# spec:
-#   project: default
-#   source:
-#     repoURL: https://argoproj.github.io/argo-helm
-#     chart: argo-rollouts
-#     targetRevision: 2.36.2  # or 'latest' — check https://artifacthub.io/packages/helm/argo/argo-rollouts
-#     helm:
-#       releaseName: argo-rollouts
-#       values: |
-#         installCRDs: true
-#   destination:
-#     server: https://kubernetes.default.svc
-#     namespace: argo-rollouts
-#   syncPolicy:
-#     automated:
-#       prune: true
-#       selfHeal: true
-#     syncOptions:
-#       - CreateNamespace=true
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-rollouts
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://argoproj.github.io/argo-helm
+    chart: argo-rollouts
+    targetRevision: 2.36.2  # or 'latest' — check https://artifacthub.io/packages/helm/argo/argo-rollouts
+    helm:
+      releaseName: argo-rollouts
+      values: |
+        installCRDs: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-rollouts
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
