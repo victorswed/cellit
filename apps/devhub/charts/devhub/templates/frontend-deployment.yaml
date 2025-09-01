@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: "{{ .Values.image.frontend.repository }}:{{ .Values.image.frontend.tag }}"
-          imagePullPolicy: {{ .Values.image.frontend.pullPolicy }}
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
           ports:
             - containerPort: 80
           volumeMounts:
@@ -34,12 +34,12 @@ kind: Service
 metadata:
   name: {{ include "devhub.fullname" . }}-frontend
 spec:
-  type: {{ .Values.service.frontend.type }}
+  type: {{ .Values.frontend.service.type }}
   selector:
     app.kubernetes.io/name: {{ include "devhub.name" . }}
     app.kubernetes.io/component: frontend
   ports:
-    - port: {{ .Values.service.frontend.port }}
+    - port: {{ .Values.frontend.service.port }}
       targetPort: 80
       name: http
 ---

@@ -1,19 +1,25 @@
-image:
-  backend:
+backend:
+  image:
     repository: docker.io/victor1721swed/cellit-backend
     tag: latest
     pullPolicy: Always
-  frontend:
+  service:
+    type: ClusterIP
+    port: 8000
+
+frontend:
+  image:
     repository: docker.io/victor1721swed/cellit-frontend
     tag: v1.0.1-canary
     pullPolicy: IfNotPresent
-service:
-  backend:
-    type: ClusterIP
-    port: 8000
+  service:
+    backend:
+      type: ClusterIP
+      port: 8000
   frontend:
     type: ClusterIP
     port: 80
+
 mongo:
   uri: mongodb://root:root@mongodb-headless.mongodb.svc.cluster.local:27017/?authSource=admin&replicaSet=rs0
   db: devhub

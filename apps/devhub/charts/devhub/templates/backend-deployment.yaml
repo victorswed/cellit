@@ -16,8 +16,9 @@ spec:
     spec:
       containers:
         - name: backend
-          image: "{{ .Values.image.backend.repository }}:{{ .Values.image.backend.tag }}"
-          imagePullPolicy: {{ .Values.image.backend.pullPolicy }}
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          # image: "{{ .Values.image.backend.repository }}:{{ .Values.image.backend.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
           args: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
           ports:
             - containerPort: 8000
@@ -40,11 +41,11 @@ kind: Service
 metadata:
   name: {{ include "devhub.fullname" . }}-backend
 spec:
-  type: {{ .Values.service.backend.type }}
+  type: {{ .Values.backend.service.type }}
   selector:
     app.kubernetes.io/name: {{ include "devhub.name" . }}
     app.kubernetes.io/component: backend
   ports:
-    - port: {{ .Values.service.backend.port }}
+    - port: {{ .Values.backend.service.port }}
       targetPort: 8000
       name: http
