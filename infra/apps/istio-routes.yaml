@@ -90,7 +90,21 @@ spec:
                       host: devhub-devhub-frontend-canary.devhub.svc.cluster.local
                       port:
                         number: 80
-                    weight: 0                
+                    weight: 0
+          - name: argorollouts-vs
+            namespace: istio-system
+            gateway: ingress-gw
+            hosts: 
+              - "argo-rollouts.dev.localhost"
+            http:
+              - match:
+                - uri:
+                    prefix: /
+                route:
+                  - destination:
+                      host: argo-rollouts-dashboard.argo-rollouts.svc.cluster.local
+                      port: 
+                        number: 3100                
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
