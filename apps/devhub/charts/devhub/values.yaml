@@ -15,10 +15,7 @@ frontend:
   service:
     backend:
       type: ClusterIP
-      port: 8000
-  frontend:
-    type: ClusterIP
-    port: 80
+      port: 80
 
 mongo:
   uri: mongodb://root:root@mongodb-headless.mongodb.svc.cluster.local:27017/?authSource=admin&replicaSet=rs0
