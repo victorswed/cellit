@@ -13,9 +13,8 @@ frontend:
     tag: v1.0.1-canary
     pullPolicy: IfNotPresent
   service:
-    backend:
-      type: ClusterIP
-      port: 80
+    type: ClusterIP
+    port: 80
 
 mongo:
   uri: mongodb://root:root@mongodb-headless.mongodb.svc.cluster.local:27017/?authSource=admin&replicaSet=rs0
