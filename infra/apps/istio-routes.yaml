@@ -69,7 +69,8 @@ spec:
             hosts:
               - "devhub.dev.localhost"
             http:
-              - match:
+              - name: backend-api
+                match:
                   - uri:
                       prefix: /api
                 route:
@@ -77,7 +78,8 @@ spec:
                       host: devhub-devhub-backend.devhub.svc.cluster.local
                       port:
                         number: 8000
-              - match:
+              - name: frontend-route
+                match:
                   - uri:
                       prefix: /
                 route:
