@@ -8,9 +8,10 @@ backend:
     port: 8000
 
 frontend:
+  strategy: rollout
   image:
     repository: docker.io/victor1721swed/cellit-frontend
-    tag: v1.0.1-canary
+    tag: v1.0.0
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
