@@ -36,8 +36,10 @@ spec:
       trafficRouting:
         istio:
           virtualService:
-            name: devhub-vs
-            routes: [frontend-route]
+            name: istio-system/devhub-vs
+            namespace: istio-system
+            routes: 
+              - frontend-route
       steps:
         - setWeight: 20
         - pause: { duration: 1m }
