@@ -36,7 +36,7 @@ spec:
       trafficRouting:
         istio:
           virtualService:
-            name: istio-system/devhub-vs
+            name: devhub-vs
             namespace: istio-system
             routes: 
               - frontend-route
