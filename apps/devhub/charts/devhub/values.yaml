@@ -11,7 +11,7 @@ frontend:
   strategy: rollout
   image:
     repository: docker.io/victor1721swed/cellit-frontend
-    tag: v1.0.0
+    tag: v1.0.1-canary
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
