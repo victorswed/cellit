@@ -8,10 +8,11 @@ backend:
     port: 8000
 
 frontend:
-  strategy: rollout
+  # Deployment strategy: "rollout" (Argo Rollouts), "flagger" (Flagger), or omit for standard deployment
+  strategy: flagger
   image:
     repository: docker.io/victor1721swed/cellit-frontend
-    tag: v2.0.0
+    tag: v2.1.0
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
