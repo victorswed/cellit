@@ -1,5 +1,6 @@
-apiVersion: apps/v1
-kind: Deployment
+{{- if eq .Values.backend.strategy "rollout" }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: {{ include "devhub.fullname" . }}-backend
 spec:
@@ -13,6 +14,9 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "devhub.name" . }}
         app.kubernetes.io/component: backend
+        {{- if eq .Values.backend.strategy "rollout" }}
+        version: stable
+        {{- end }}
     spec:
       containers:
         - name: backend
@@ -28,12 +32,57 @@ spec:
               value: {{ .Values.mongo.db | quote }}
             - name: MONGO_COLLECTION
               value: {{ .Values.mongo.collection | quote }}
-          # readinessProbe:
-          #   httpGet:
-          #     path: /healthz
-          #     port: 8000
-          #   initialDelaySeconds: 3
-          #   periodSeconds: 5
+  strategy:
+    canary:
+      canaryService: {{ include "devhub.fullname" . }}-backend-canary
+      stableService: {{ include "devhub.fullname" . }}-backend
+      trafficRouting:
+        istio:
+          virtualService:
+            name: devhub-vs.istio-system
+            routes:
+              - backend-api
+      steps:
+        - setWeight: 20
+        - pause: { duration: 1m }
+        - setWeight: 50
+        - pause: { duration: 2m }
+        - setWeight: 100
+{{- else }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "devhub.fullname" . }}-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "devhub.name" . }}
+      app.kubernetes.io/component: backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "devhub.name" . }}
+        app.kubernetes.io/component: backend
+        {{- if eq .Values.backend.strategy "rollout" }}
+        version: stable
+        {{- end }}
+    spec:
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          args: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+          ports:
+            - containerPort: 8000
+          env:
+            - name: MONGO_URI
+              value: {{ .Values.mongo.uri | quote }}
+            - name: MONGO_DB
+              value: {{ .Values.mongo.db | quote }}
+            - name: MONGO_COLLECTION
+              value: {{ .Values.mongo.collection | quote }}
+{{- end }}
 ---
 apiVersion: v1
 kind: Service
@@ -48,3 +97,19 @@ spec:
     - port: {{ .Values.backend.service.port }}
       targetPort: 8000
       name: http
+{{- if eq .Values.backend.strategy "rollout" }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "devhub.fullname" . }}-backend-canary
+spec:
+  type: {{ .Values.backend.service.type }}
+  selector:
+    app.kubernetes.io/name: {{ include "devhub.name" . }}
+    app.kubernetes.io/component: backend
+  ports:
+    - port: {{ .Values.backend.service.port }}
+      targetPort: 8000
+      name: http
+{{- end }}

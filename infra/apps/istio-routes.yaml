@@ -69,6 +69,18 @@ spec:
             hosts:
               - "devhub.dev.localhost"
             http:
+              - name: backend-api-canary
+                match:
+                  - uri:
+                      prefix: /api
+                    headers:
+                      x-canary-version:
+                        exact: "canary"
+                route:
+                  - destination:
+                      host: devhub-devhub-backend-canary.devhub.svc.cluster.local
+                      port:
+                        number: 8000
               - name: backend-api
                 match:
                   - uri:
@@ -78,6 +90,12 @@ spec:
                       host: devhub-devhub-backend.devhub.svc.cluster.local
                       port:
                         number: 8000
+                    weight: 100
+                  - destination:
+                      host: devhub-devhub-backend-canary.devhub.svc.cluster.local
+                      port:
+                        number: 8000
+                    weight: 0
               - name: frontend-route
                 match:
                   - uri:

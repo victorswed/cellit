@@ -54,4 +54,10 @@ metadata:
     app.kubernetes.io/component: frontend
 data:
   config.js: |
+    // Frontend JavaScript runs in browser, must use external endpoints
     window.API_BASE = window.API_BASE || "/api"
+    {{- if eq .Values.backend.strategy "rollout" }}
+    window.CANARY_ENABLED = true;
+    {{- else }}
+    window.CANARY_ENABLED = false;
+    {{- end }}

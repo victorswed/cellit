@@ -68,8 +68,43 @@
   <script>
     const API = (window.API_BASE || '/api');
 
+    // Detect if this is a canary deployment
+    function isCanaryDeployment() {
+      // First check if canary is enabled for this deployment
+      if (!window.CANARY_ENABLED) return false;
+
+      // Check various ways canary can be activated:
+      // 1. Query parameter (for testing: ?canary=true)
+      // 2. Cookie (can be set by Istio traffic routing)
+      // 3. Local storage (for persistent testing)
+      // 4. X-Canary header in response (would need to be checked differently)
+      return window.location.search.includes('canary=true') ||
+             document.cookie.includes('canary=true') ||
+             localStorage.getItem('canary') === 'true';
+    }
+
+    // Create fetch wrapper that adds canary header when needed
+    function apiRequest(url, options = {}) {
+      const headers = options.headers || {};
+
+      if (isCanaryDeployment()) {
+        headers['x-canary-version'] = 'canary';
+        // Add visual indicator for canary
+        document.body.style.borderTop = '3px solid orange';
+        if (!document.querySelector('.canary-indicator')) {
+          const indicator = document.createElement('div');
+          indicator.className = 'canary-indicator';
+          indicator.style.cssText = 'position:fixed;top:0;right:0;background:orange;color:black;padding:4px 8px;font-size:12px;z-index:1000;';
+          indicator.textContent = 'CANARY';
+          document.body.appendChild(indicator);
+        }
+      }
+
+      return fetch(url, { ...options, headers });
+    }
+
     async function fetchOrders() {
-      const res = await fetch(`${API}/orders`);
+      const res = await apiRequest(`${API}/orders`);
       const data = await res.json();
       const tbody = document.querySelector('#orders tbody');
       tbody.innerHTML = '';
@@ -89,7 +124,11 @@
         size: document.getElementById('size').value,
         notes: document.getElementById('notes').value,
       };
-      const res = await fetch(`${API}/orders`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const res = await apiRequest(`${API}/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
       if (res.ok) {
         document.getElementById('status').textContent = 'Order placed!';
         await fetchOrders();

@@ -1,4 +1,5 @@
 backend:
+  strategy: rollout
   image:
     repository: docker.io/victor1721swed/cellit-backend
     tag: latest
