@@ -38,6 +38,11 @@ spec:
     maxWeight: 50
     # canary increment step
     stepWeight: 25
-    # skip analysis and do time-based promotion
-    skipAnalysis: true
+    # Simple webhook test
+    webhooks:
+    - name: load-test
+      url: http://flagger-loadtester.flagger-system/
+      timeout: 5s
+      metadata:
+        cmd: "curl -s http://devhub-frontend-canary.devhub:80/ > /dev/null"
 {{- end }}

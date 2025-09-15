@@ -16,9 +16,9 @@ spec:
         meshProvider: istio
         # Flagger will watch for canary objects in all namespaces
         namespace: ""
-        # Disable the loadtester
+        # Enable the loadtester (required for webhooks)
         loadtester:
-          enabled: false
+          enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: flagger-system
