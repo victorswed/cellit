@@ -13,6 +13,9 @@ spec:
       values: |
         meshConfig:
           accessLogFile: /dev/stdout
+        global:
+          proxy:
+            holdApplicationUntilProxyStarts: true
   destination:
     server: https://kubernetes.default.svc
     namespace: istio-system
