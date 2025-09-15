@@ -12,7 +12,7 @@ frontend:
   strategy: flagger
   image:
     repository: docker.io/victor1721swed/cellit-frontend
-    tag: v2.0.0
+    tag: v2.1.0
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
