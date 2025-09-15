@@ -32,6 +32,8 @@ spec:
   analysis:
     # schedule interval (default 60s)
     interval: 1m
+    # max number of failed metric checks before rollback
+    threshold: 5
     # max traffic percentage routed to canary
     # percentage (0-100)
     maxWeight: 50
@@ -40,5 +42,10 @@ spec:
     stepWeight: 25
     # Number of iterations before promotion
     iterations: 2
-    # No metrics - simple time-based promotion
+    # Basic metrics using Istio (built-in)
+    metrics:
+    - name: request-success-rate
+      thresholdRange:
+        min: 95
+      interval: 1m
 {{- end }}
