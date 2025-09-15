@@ -31,13 +31,15 @@ spec:
             name: {{ include "devhub.fullname" . }}-frontend-config
   strategy:
     canary:
+      maxUnavailable: 0
+      maxSurge: 1
       canaryService: {{ include "devhub.fullname" . }}-frontend-canary
       stableService: {{ include "devhub.fullname" . }}-frontend
       trafficRouting:
         istio:
           virtualService:
             name: devhub-vs.istio-system
-            routes: 
+            routes:
               - frontend-route
       steps:
         - setWeight: 20
